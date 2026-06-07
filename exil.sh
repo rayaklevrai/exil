@@ -10,11 +10,13 @@ fi
 
 if ! command -v curl > /dev/null ; then
   echo "command curl not found, execute : pkg install curl"
+  exit 1
 fi
 
 
 if ! command -v rish > /dev/null; then
   echo "please install rish via shizuku"
+  exit 1
 fi
 case $1 in
 
