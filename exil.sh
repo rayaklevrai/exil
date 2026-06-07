@@ -55,7 +55,7 @@ case $1 in
           fi
           
           
-          su -c pm install $files
+          rish -c pm install $files
           case $4 in
             --save | -s)
               echo "files is save"
@@ -68,7 +68,7 @@ case $1 in
           ;;
         --local | -l)
           files=$3
-          su -c pm install $files
+          rish -c pm install $files
           if [ $4 = 1 ]; then
             exit 1
           elif [ $4 = 0 ]; then
