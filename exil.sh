@@ -1,25 +1,35 @@
 #!/bin/bash
+# sorry if english is bad 😔
+echo "enter choice for install:
+      1) shizuku (rish)
+      2) root (su)"
+read -p "your choice : " choice
+if [[ $choice == "shizuku" || $choice == "1" ]]; then
+  if ! command -v rish > /dev/null; then
+  echo "please install rish via shizuku"
+  exit 1
+  fi
+  choice="rish"
+elif [[ $choice == "root" || $choice == "2" ]]; then
+  if ! command -v su > /dev/null ; then
+    echo "command su not found"
+    echo "please use shizuku or grant root access at termux"
+  fi
+  choice="su"
+fi
 
-if echo $TERMUX_VERSION > /dev/null; then
+if [ ! -z $TERMUX_VERSION ]; then
 	echo "environnement : termux $TERMUX_VERSION"
 else
 	echo "environnement is not termux"
-	echo "if your are on android, please install termux"
+	echo "if you are on android, please install termux"
 	exit 1
 fi
-
 if ! command -v curl > /dev/null ; then
   echo "command curl not found, execute : pkg install curl"
   exit 1
 fi
-
-
-if ! command -v rish > /dev/null; then
-  echo "please install rish via shizuku"
-  exit 1
-fi
 case $1 in
-
   -v | --version)
     echo "v0.1"
     echo "made by rayak"
@@ -28,18 +38,21 @@ case $1 in
       case $2 in
         --url)
           url=$3
-          
-          if ! ls | grep app.txt > /dev/null  ; then
+          if [ ! -f app.txt ]; then
             touch app.txt
+          fi
+          if [ ! -f temp.txt ]; then
+            touch temp.txt
           fi
           if grep "$url" app.txt > /dev/null ; then
             echo "url already exist on app.txt, skip it."
           else
             echo $url >> app.txt
           fi
-          files=`grep -oE '[^/]+$' 'app.txt'`
+          echo $url > temp.txt
+          files=`grep -oE '[^/]+$' temp.txt`
           
-          if ls | grep "$files" > /dev/null  ; then
+          if [ -f "$files" ]  ; then
             echo "files already present, bypass download."
           else
             echo "Verif..."
@@ -53,9 +66,7 @@ case $1 in
             echo "Downloading..."
             curl -s -O $url
           fi
-          
-          
-          rish -c pm install $files
+          $choice -c pm install $files
           case $4 in
             --save | -s)
               echo "files is save"
@@ -68,16 +79,17 @@ case $1 in
           ;;
         --local | -l)
           files=$3
-          rish -c pm install $files
-          if [ $4 = 1 ]; then
-            exit 1
-          elif [ $4 = 0 ]; then
-            rm $files
-          else
-            rm $files
-          fi
+          $choice -c pm install $files
+          case $4 in
+            --save | -s)
+              echo "files is save"
+              ;;
+            *)
+              echo "files is rm"
+              rm $files
+              ;;
+          esac
           ;;
-      
         *)
           echo "please enter a valid parameter"
           ;;
@@ -85,13 +97,15 @@ case $1 in
         
     ;;
   --reset | -r)
+    echo "️wiping...️"
     cat /dev/null > app.txt
+    echo "wipe successful 🗑️"
     ;;
   *)
     echo "syntax : ./exil.sh
     -i/install : install package from curl
     -v/--version : print version
-    --/--reset: reset app.txt
+    -r/--reset: reset app.txt
     "
     
   	;;
