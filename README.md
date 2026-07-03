@@ -6,7 +6,7 @@ syntax : bash exil.sh/ ./exils.sh
     -v/--version : print version
     -r/--reset: reset app.txt
 ```
-exemple 
+<p> example </p>
 ```
 bash exil.sh -i --url https://f-droid.org/repo/com.duckduckgo.mobile.android_52811000.apk -s
 ```
