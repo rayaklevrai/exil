@@ -7,10 +7,4 @@ syntax : bash exil.sh/ ./exils.sh
     -r/--reset: reset app.txt
     -d : debug
     --status : display shizuku and root information (on or off)
-```
-example
-```
-bash exil.sh -i --url https://f-droid.org/repo/com.duckduckgo.mobile.android_52811000.apk -s
-```
-
 
