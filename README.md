@@ -5,6 +5,8 @@ syntax : bash exil.sh/ ./exils.sh
     -i/install : install package from curl
     -v/--version : print version
     -r/--reset: reset app.txt
+    -d : debug
+    --status : display shizuku and root information (on or off)
 ```
 <p> example </p>
 ```
