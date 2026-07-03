@@ -8,10 +8,9 @@ syntax : bash exil.sh/ ./exils.sh
     -d : debug
     --status : display shizuku and root information (on or off)
 ```
-<p> example </p>
+example
 ```
 bash exil.sh -i --url https://f-droid.org/repo/com.duckduckgo.mobile.android_52811000.apk -s
 ```
-
 
 
