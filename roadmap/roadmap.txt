@@ -1,0 +1,1 @@
+v0.2 : replace case by for boucle and set function
