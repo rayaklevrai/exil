@@ -57,7 +57,7 @@ case $1 in
             echo $url >> app.txt
           fi
           echo $url > temp.txt
-          files=`grep -oE '[^/]+$' temp.txt`
+          files=`basename "$url" temp.txt`
           
           if [ -f "$files" ]  ; then
             echo "files already present, bypass download."
