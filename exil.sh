@@ -111,7 +111,7 @@ case $1 in
   --status)
     echo "exil status"
     if command -v rish > /dev/null; then
-      rish_version=`rish -c "pm list packages --show-versioncode" | grep moe.shizuku.privileged.api | cut -d " " -f 2 | cut -d ":" -f 2`
+      rish_version=`rish -c "pm list packages -3 --show-versioncode" | grep moe.shizuku.privileged.api | cut -d " " -f 2 | cut -d ":" -f 2`
       echo "shizuku on ($rish_version)"
     else
       echo "shizuku off"
