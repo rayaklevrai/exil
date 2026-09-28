@@ -13,6 +13,7 @@ fi
 for ((i=1; i<=$#; i++)); do
   if [[ ${!i} == "-d" ]]; then
     echo "environnement : termux $TERMUX_VERSION"
+    debug=true
   fi
 done
 #.....
@@ -36,99 +37,3 @@ if [[ $1 == "-i" || $1 == "install" ]]; then
   fi
 fi
 
-case $1 in
-  -v | --version)
-    echo "v0.1"
-    echo "made by rayak"
-    ;;
-  -i | install)
-      case $2 in
-        --url)
-          url=$3
-          if [ ! -f app.txt ]; then
-            touch app.txt
-          fi
-          if [ ! -f temp.txt ]; then
-            touch temp.txt
-          fi
-          if grep "$url" app.txt > /dev/null ; then
-            echo "url already exist on app.txt, skip it."
-          else
-            echo $url >> app.txt
-          fi
-          echo $url > temp.txt
-          files=`grep -oE '[^/]+$' temp.txt`
-          
-          if [ -f "$files" ]  ; then
-            echo "files already present, bypass download."
-          else
-            echo "Verif..."
-            http_response=`curl -o /dev/null -s -w "%{response_code}" $url`
-            if [ $http_response == "200" ] ; then
-	            echo "code 200, perfect, continue"
-            else
-	            echo "code $http_response, dont perfect, exit 😔"
-              exit 1
-            fi
-            echo "Downloading..."
-            curl -s -O $url
-          fi
-          $choice -c pm install $files
-          case $4 in
-            --save | -s)
-              echo "files is save"
-              ;;
-            *)
-              echo "files is rm"
-              rm $files
-              ;;
-          esac
-          ;;
-        --local | -l)
-          files=$3
-          $choice -c pm install $files
-          case $4 in
-            --save | -s)
-              echo "files is save"
-              ;;
-            *)
-              echo "files is rm"
-              rm $files
-              ;;
-          esac
-          ;;
-        *)
-          echo "please enter a valid parameter"
-          ;;
-      esac
-        
-    ;;
-  --reset | -r)
-    echo "️wiping...️"
-    cat /dev/null > app.txt
-    echo "wipe successful 🗑️"
-    ;;
-  --status)
-    echo "exil status"
-    if command -v rish > /dev/null; then
-      rish_version=`rish -c "pm list packages --show-versioncode" | grep moe.shizuku.privileged.api | cut -d " " -f 2 | cut -d ":" -f 2`
-      echo "shizuku on ($rish_version)"
-    else
-      echo "shizuku off"
-    fi
-    if command -v su >/dev/null; then
-      su_version=`su -v`
-      echo "root : on ($su_version)"
-    else
-      echo "root : off"
-    fi
-    ;;
-  *)
-    echo "syntax : ./exil.sh
-    -i/install : install package from curl
-    -v/--version : print version
-    -r/--reset: reset app.txt
-    "
-    
-  	;;
-esac
